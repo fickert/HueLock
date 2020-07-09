@@ -7,20 +7,20 @@
         xmlns:properties="clr-namespace:HueLock.Properties"
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
-    <Grid>
+        Title="MainWindow" Height="180" Width="400" Loaded="Window_Loaded">
+    <StackPanel Orientation="Vertical" Height="Auto" Margin="10">
         <CheckBox x:Name="cbTurnOffOnLock"
                         IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=TurnOffOnLock, Mode=TwoWay}"
-                        Height="20" Margin="29,20,459,272">
+                        Height="20">
             Turn off lights on lock
         </CheckBox>
         <CheckBox x:Name="cbTurnOffOnShutdown"
                         IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=TurnOffOnShutdown, Mode=TwoWay}"
-                        Height="20" Margin="29,60,459,272">
+                        Height="20">
             Turn off lights on logout/shutdown
         </CheckBox>
-        <StackPanel Orientation="Horizontal" Height="70" Margin="10">
-            <StackPanel Orientation="Vertical" Height="40" Margin="10">
+        <StackPanel Orientation="Horizontal" Height="60">
+            <StackPanel Orientation="Vertical" Height="40" Margin="0,0,10,0">
                 <TextBlock>
                     Connection Status:
                 </TextBlock>
@@ -28,7 +28,7 @@
                     Bridge IP Address:
                 </TextBlock>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Height="40" Margin="10">
+            <StackPanel Orientation="Vertical" Height="40" Margin="0,0,10,0">
                 <TextBlock x:Name="connectionStatus" Text="{Binding Path=ConnectionStatus}" Width="100"/>
                 <TextBlock x:Name="bridgeStatus" Text="{Binding Path=BridgeIpAddress}" Width="100"/>
             </StackPanel>
@@ -36,5 +36,5 @@
                 Select Bridge
             </Button>
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </Window>

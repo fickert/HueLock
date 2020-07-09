@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HueLock.Hue"
         mc:Ignorable="d"
-        Title="Link Hue Bridge" Height="200" Width="600">
+        Title="Link Hue Bridge" Height="120" Width="500">
     <Grid>
-        <TextBlock HorizontalAlignment="Center" FontSize="20">Press the button on your Hue Bridge to connect, then press OK.</TextBlock>
+        <TextBlock HorizontalAlignment="Center" FontSize="16">Press the button on your Hue Bridge to connect, then press OK.</TextBlock>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="Confirm" Height="30" Width="100" Margin="20" Click="Confirm_Click">OK</Button>
             <Button x:Name="Cancel" Height="30" Width="100" Margin="20" Click="Cancel_Click">Cancel</Button>
