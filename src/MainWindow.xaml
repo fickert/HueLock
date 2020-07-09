@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:HueLock.Properties"
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="MainWindow" Height="180" Width="400" Loaded="Window_Loaded">
+        Title="HueLock" Height="180" Width="400" Loaded="Window_Loaded">
     <StackPanel Orientation="Vertical" Height="Auto" Margin="10">
         <CheckBox x:Name="cbTurnOffOnLock"
                         IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=TurnOffOnLock, Mode=TwoWay}"
