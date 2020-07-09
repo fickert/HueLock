@@ -9,8 +9,7 @@ namespace HueLock {
 	/// </summary>
 	public partial class MainWindow : Window, INotifyPropertyChanged {
 
-		private HueLockManager Manager;
-		public event PropertyChangedEventHandler PropertyChanged;
+		private readonly HueLockManager manager;
 
 		enum Status {
 			DISCONNECTED,
@@ -41,6 +40,8 @@ namespace HueLock {
 			}
 		}
 
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		protected void OnPropertyChanged(string propertyName) {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
@@ -49,7 +50,7 @@ namespace HueLock {
 			InitializeComponent();
 			connectionStatus.DataContext = this;
 			bridgeStatus.DataContext = this;
-			Manager = new HueLockManager();
+			manager = new HueLockManager();
 			status = Status.DISCONNECTED;
 			OnPropertyChanged(nameof(ConnectionStatus));
 		}
@@ -61,7 +62,7 @@ namespace HueLock {
 		private async Task InitializeConnectionAsync() {
 			status = Status.CONNECTING;
 			OnPropertyChanged(nameof(ConnectionStatus));
-			var initializationResult = await Manager.InitializeClient();
+			var initializationResult = await manager.InitializeClient();
 			status = initializationResult ? Status.CONNECTED : Status.DISCONNECTED;
 			OnPropertyChanged(nameof(ConnectionStatus));
 		}
@@ -70,7 +71,7 @@ namespace HueLock {
 			var bridgeDiscoveryWindow = new Hue.BridgeDiscovery();
 			if (!(bridgeDiscoveryWindow.ShowDialog() ?? false))
 				return;
-			var selectedBridge = (LocatedBridge) bridgeDiscoveryWindow.bridgesView.SelectedItem;
+			var selectedBridge = (LocatedBridge)bridgeDiscoveryWindow.bridgesView.SelectedItem;
 			if (selectedBridge is null)
 				return;
 			Properties.Settings.Default.BridgeId = selectedBridge.BridgeId;

@@ -116,7 +116,6 @@
     <Compile Include="Hue\ConfirmLink.xaml.cs">
       <DependentUpon>ConfirmLink.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Options.cs" />
     <Page Include="Hue\BridgeDiscovery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
