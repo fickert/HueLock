@@ -1,6 +1,5 @@
 ﻿using Q42.HueApi.Models.Bridge;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace HueLock {
@@ -11,21 +10,14 @@ namespace HueLock {
 
 		private readonly HueLockManager manager;
 
-		enum Status {
-			DISCONNECTED,
-			CONNECTED,
-			CONNECTING
-		}
-
-		private Status status;
 		public string ConnectionStatus {
 			get {
-				switch (status) {
-					case Status.DISCONNECTED:
+				switch (manager.ConnectionStatus) {
+					case HueLockManager.BridgeConnectionStatus.DISCONNECTED:
 						return "not connected";
-					case Status.CONNECTED:
+					case HueLockManager.BridgeConnectionStatus.CONNECTED:
 						return "connected";
-					case Status.CONNECTING:
+					case HueLockManager.BridgeConnectionStatus.CONNECTING:
 						return "connecting...";
 					default:
 						return "UNKNOWN";
@@ -46,25 +38,21 @@ namespace HueLock {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public MainWindow() {
+		private void Manager_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+			if (e.PropertyName == nameof(manager.ConnectionStatus))
+				OnPropertyChanged(nameof(ConnectionStatus));
+		}
+
+		public MainWindow(HueLockManager Manager) {
 			InitializeComponent();
 			connectionStatus.DataContext = this;
 			bridgeStatus.DataContext = this;
-			manager = new HueLockManager();
-			status = Status.DISCONNECTED;
-			OnPropertyChanged(nameof(ConnectionStatus));
+			manager = Manager;
+			manager.PropertyChanged += Manager_PropertyChanged;
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			Properties.Settings.Default.Save();
-		}
-
-		private async Task InitializeConnectionAsync() {
-			status = Status.CONNECTING;
-			OnPropertyChanged(nameof(ConnectionStatus));
-			var initializationResult = await manager.InitializeClient();
-			status = initializationResult ? Status.CONNECTED : Status.DISCONNECTED;
-			OnPropertyChanged(nameof(ConnectionStatus));
 		}
 
 		private async void Button_Click(object sender, RoutedEventArgs e) {
@@ -77,12 +65,12 @@ namespace HueLock {
 			Properties.Settings.Default.BridgeId = selectedBridge.BridgeId;
 			Properties.Settings.Default.BridgeIpAddress = selectedBridge.IpAddress;
 			OnPropertyChanged(nameof(BridgeIpAddress));
-			await InitializeConnectionAsync();
+			await manager.InitializeConnectionAsync();
 		}
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e) {
 			if (!string.IsNullOrEmpty(Properties.Settings.Default.BridgeIpAddress))
-				await InitializeConnectionAsync();
+				await manager.InitializeConnectionAsync();
 		}
 	}
 }

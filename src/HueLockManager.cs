@@ -1,12 +1,38 @@
 ﻿using Q42.HueApi;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace HueLock {
-	class HueLockManager {
+	public class HueLockManager : INotifyPropertyChanged {
+
+		public enum BridgeConnectionStatus {
+			DISCONNECTED,
+			CONNECTED,
+			CONNECTING
+		}
+
+		private BridgeConnectionStatus connectionStatus;
+		public BridgeConnectionStatus ConnectionStatus {
+			get {
+				return connectionStatus;
+			}
+			private set {
+				if (value == connectionStatus)
+					return;
+				connectionStatus = value;
+				OnPropertyChanged(nameof(ConnectionStatus));
+			}
+		}
 
 		private LocalHueClient hueClient;
 		private readonly IDictionary<string, bool> lastState;
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged(string propertyName) {
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
 		private async Task TurnOffLightsAsync(bool storeState) {
 			lastState.Clear();
@@ -32,6 +58,12 @@ namespace HueLock {
 			Microsoft.Win32.SystemEvents.SessionSwitch += SystemEvents_SessionSwitch;
 			Microsoft.Win32.SystemEvents.SessionEnded += SystemEvents_SessionEnded;
 			lastState = new Dictionary<string, bool>();
+		}
+
+		public async Task InitializeConnectionAsync() {
+			ConnectionStatus = BridgeConnectionStatus.CONNECTING;
+			var initializationResult = await InitializeClient();
+			ConnectionStatus = initializationResult ? BridgeConnectionStatus.CONNECTED : BridgeConnectionStatus.DISCONNECTED;
 		}
 
 		public async Task<bool> InitializeClient() {
