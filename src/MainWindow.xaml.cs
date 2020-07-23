@@ -48,7 +48,7 @@ namespace HueLock {
 		}
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e) {
-			if (!string.IsNullOrEmpty(Properties.Settings.Default.BridgeIpAddress))
+			if (manager.ConnectionStatus == HueLockManager.BridgeConnectionStatus.DISCONNECTED && !string.IsNullOrEmpty(Properties.Settings.Default.BridgeIpAddress))
 				await manager.InitializeConnectionAsync();
 		}
 	}

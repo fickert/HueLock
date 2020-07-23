@@ -15,6 +15,9 @@ namespace HueLock {
 			var minimized = Array.Exists(e.Args, arg => arg == "/minimized");
 
 			manager = new HueLockManager();
+			if (!string.IsNullOrEmpty(HueLock.Properties.Settings.Default.BridgeIpAddress))
+				_ = manager.InitializeConnectionAsync().ConfigureAwait(false);
+
 			var MainWindow = new MainWindow(manager);
 			if (minimized)
 				MainWindow.WindowState = WindowState.Minimized;
