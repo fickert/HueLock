@@ -29,7 +29,7 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel Orientation="Vertical" Height="40" Margin="0,0,10,0">
-                <TextBlock x:Name="connectionStatus" Text="{Binding Path=ConnectionStatus}" Width="100"/>
+                <TextBlock x:Name="connectionStatus" Text="{Binding Path=ConnectionStatusMessage}" Width="100"/>
                 <TextBlock x:Name="bridgeStatus" Text="{Binding Path=BridgeIpAddress}" Width="100"/>
             </StackPanel>
             <Button Click="Button_Click" Height="30">

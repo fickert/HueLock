@@ -10,21 +10,6 @@ namespace HueLock {
 
 		private readonly HueLockManager manager;
 
-		public string ConnectionStatus {
-			get {
-				switch (manager.ConnectionStatus) {
-					case HueLockManager.BridgeConnectionStatus.DISCONNECTED:
-						return "not connected";
-					case HueLockManager.BridgeConnectionStatus.CONNECTED:
-						return "connected";
-					case HueLockManager.BridgeConnectionStatus.CONNECTING:
-						return "connecting...";
-					default:
-						return "UNKNOWN";
-				}
-			}
-		}
-
 		public string BridgeIpAddress {
 			get {
 				var bridgeIpAddress = Properties.Settings.Default.BridgeIpAddress;
@@ -38,17 +23,11 @@ namespace HueLock {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		private void Manager_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-			if (e.PropertyName == nameof(manager.ConnectionStatus))
-				OnPropertyChanged(nameof(ConnectionStatus));
-		}
-
 		public MainWindow(HueLockManager Manager) {
 			InitializeComponent();
-			connectionStatus.DataContext = this;
-			bridgeStatus.DataContext = this;
 			manager = Manager;
-			manager.PropertyChanged += Manager_PropertyChanged;
+			bridgeStatus.DataContext = this;
+			connectionStatus.DataContext = manager;
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {

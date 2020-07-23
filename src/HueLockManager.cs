@@ -12,16 +12,31 @@ namespace HueLock {
 			CONNECTING
 		}
 
-		private BridgeConnectionStatus connectionStatus;
-		public BridgeConnectionStatus ConnectionStatus {
+		private BridgeConnectionStatus _ConnectionStatus;
+		private BridgeConnectionStatus ConnectionStatus {
 			get {
-				return connectionStatus;
+				return _ConnectionStatus;
 			}
-			private set {
-				if (value == connectionStatus)
+			set {
+				if (value == _ConnectionStatus)
 					return;
-				connectionStatus = value;
+				_ConnectionStatus = value;
 				OnPropertyChanged(nameof(ConnectionStatus));
+				OnPropertyChanged(nameof(ConnectionStatusMessage));
+			}
+		}
+		public string ConnectionStatusMessage {
+			get {
+				switch (ConnectionStatus) {
+					case BridgeConnectionStatus.DISCONNECTED:
+						return "not connected";
+					case BridgeConnectionStatus.CONNECTED:
+						return "connected";
+					case BridgeConnectionStatus.CONNECTING:
+						return "connecting...";
+					default:
+						return "UNKNOWN";
+				}
 			}
 		}
 
