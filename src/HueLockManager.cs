@@ -13,7 +13,7 @@ namespace HueLock {
 		}
 
 		private BridgeConnectionStatus _ConnectionStatus;
-		private BridgeConnectionStatus ConnectionStatus {
+		public BridgeConnectionStatus ConnectionStatus {
 			get {
 				return _ConnectionStatus;
 			}

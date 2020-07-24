@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Windows;
 
 namespace HueLock {
@@ -8,20 +9,21 @@ namespace HueLock {
 	public partial class App : Application {
 
 		private HueLockManager manager;
+		private TaskbarIcon trayIcon;
 
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
 
-			var minimized = Array.Exists(e.Args, arg => arg == "/minimized");
-
 			manager = new HueLockManager();
 			if (!string.IsNullOrEmpty(HueLock.Properties.Settings.Default.BridgeIpAddress))
 				_ = manager.InitializeConnectionAsync().ConfigureAwait(false);
+			trayIcon = new TrayIcon(manager);
 
-			var MainWindow = new MainWindow(manager);
-			if (minimized)
-				MainWindow.WindowState = WindowState.Minimized;
-			MainWindow.Show();
+			var minimized = Array.Exists(e.Args, arg => arg == "/minimized");
+			if (!minimized) {
+				var MainWindow = new MainWindow(manager);
+				MainWindow.Show();
+			}
 		}
 	}
 }
