@@ -19,6 +19,13 @@
                         Height="20">
             Turn off lights on logout/shutdown
         </CheckBox>
+        <CheckBox x:Name="cbAutostart"
+                  Checked="cbAutostart_Checked"
+                  Unchecked="cbAutostart_Unchecked"
+                  Height="20"
+                  Margin="0,10,0,0">
+            Start HueLock on system startup
+        </CheckBox>
         <StackPanel Orientation="Horizontal" Height="60">
             <StackPanel Orientation="Vertical" Height="40" Margin="0,0,10,0">
                 <TextBlock>

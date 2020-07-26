@@ -1,4 +1,5 @@
-﻿using Q42.HueApi.Models.Bridge;
+﻿using Microsoft.Win32;
+using Q42.HueApi.Models.Bridge;
 using System.ComponentModel;
 using System.Windows;
 
@@ -9,6 +10,7 @@ namespace HueLock {
 	public partial class MainWindow : Window, INotifyPropertyChanged {
 
 		private readonly HueLockManager manager;
+		private static readonly RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
 		public string BridgeIpAddress {
 			get {
@@ -25,9 +27,22 @@ namespace HueLock {
 
 		public MainWindow(HueLockManager Manager) {
 			InitializeComponent();
+			InitializeAutostartCheckbox();
 			manager = Manager;
 			bridgeStatus.DataContext = this;
 			connectionStatus.DataContext = manager;
+		}
+
+		private void InitializeAutostartCheckbox() {
+			cbAutostart.IsChecked = rkApp.GetValue("HueLock") != null;
+		}
+
+		private void cbAutostart_Checked(object sender, RoutedEventArgs e) {
+			rkApp.SetValue("HueLock", System.Reflection.Assembly.GetExecutingAssembly().Location + " /minimized");
+		}
+
+		private void cbAutostart_Unchecked(object sender, RoutedEventArgs e) {
+			rkApp.DeleteValue("HueLock");
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
