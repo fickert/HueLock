@@ -96,7 +96,9 @@ namespace HueLock {
 		private async void SystemEvents_SessionSwitch(object sender, Microsoft.Win32.SessionSwitchEventArgs e) {
 			if (!Properties.Settings.Default.TurnOffOnLock)
 				return;
-			if (hueClient is null || !hueClient.IsInitialized || !await InitializeClient())
+			if (hueClient is null)
+				return;
+			if (!hueClient.IsInitialized && !await InitializeClient())
 				return;
 			if (e.Reason == Microsoft.Win32.SessionSwitchReason.SessionLock) {
 				await TurnOffLightsAsync(true);
@@ -109,7 +111,9 @@ namespace HueLock {
 			Microsoft.Win32.SystemEvents.SessionEnded -= SystemEvents_SessionEnded;
 			if (!Properties.Settings.Default.TurnOffOnShutdown)
 				return;
-			if (hueClient is null || !hueClient.IsInitialized || !await InitializeClient())
+			if (hueClient is null)
+				return;
+			if (!hueClient.IsInitialized && !await InitializeClient())
 				return;
 			await TurnOffLightsAsync(false);
 		}
