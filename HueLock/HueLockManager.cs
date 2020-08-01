@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HueLock {
 	public class HueLockManager : INotifyPropertyChanged {
@@ -71,7 +72,7 @@ namespace HueLock {
 
 		public HueLockManager() {
 			Microsoft.Win32.SystemEvents.SessionSwitch += SystemEvents_SessionSwitch;
-			Microsoft.Win32.SystemEvents.SessionEnded += SystemEvents_SessionEnded;
+			Application.Current.SessionEnding += App_SessionEnding;
 			lastState = new Dictionary<string, bool>();
 		}
 
@@ -107,8 +108,8 @@ namespace HueLock {
 			}
 		}
 
-		private async void SystemEvents_SessionEnded(object sender, Microsoft.Win32.SessionEndedEventArgs e) {
-			Microsoft.Win32.SystemEvents.SessionEnded -= SystemEvents_SessionEnded;
+		private async void App_SessionEnding(object sender, SessionEndingCancelEventArgs e) {
+			Application.Current.SessionEnding -= App_SessionEnding;
 			if (!Properties.Settings.Default.TurnOffOnShutdown)
 				return;
 			if (hueClient is null)
