@@ -48,7 +48,6 @@ namespace HueLock {
 
 		public TrayIcon(HueLockManager Manager) {
 			InitializeComponent();
-			Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().ManifestModule.Name);
 			this.Manager = Manager;
 			DataContext = this;
 		}

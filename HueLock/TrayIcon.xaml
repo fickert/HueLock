@@ -3,6 +3,7 @@
                 xmlns:local="clr-namespace:HueLock"
                 xmlns:tb="http://www.hardcodet.net/taskbar"
                 x:Class="HueLock.TrayIcon"
+                IconSource="Resources/icon.ico"
                 ToolTipText="{Binding Path=Manager.ConnectionStatusMessage, StringFormat=HueLock – {0}}"
                 DoubleClickCommand="{Binding ShowWindowCommand}">
     <tb:TaskbarIcon.ContextMenu>
