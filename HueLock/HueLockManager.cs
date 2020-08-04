@@ -66,6 +66,8 @@ namespace HueLock {
 			foreach (var entry in lastState)
 				if (entry.Value)
 					lightsToTurnOn.Add(entry.Key);
+			if (lightsToTurnOn.Count == 0)
+				return;
 			var command = new LightCommand().TurnOn();
 			await hueClient.SendCommandAsync(command, lightsToTurnOn);
 		}
